@@ -1,5 +1,13 @@
 version: '3.8'
 services:
+
+  frontend:
+    image: antoniopapa1991/django-frontend
+    ports:
+      - 8000:80
+    depends_on:
+      - admin_api
+
   admin_api:
     container_name: django_api
     build:
