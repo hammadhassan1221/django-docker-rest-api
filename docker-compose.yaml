@@ -4,7 +4,7 @@ services:
   frontend:
     image: antoniopapa1991/django-frontend
     ports:
-      - 8000:80
+      - 8080:80
     depends_on:
       - admin_api
 
@@ -30,3 +30,5 @@ services:
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - .dbdata:/var/lib/mysql
+    ports:
+      - 33066:3306
