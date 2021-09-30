@@ -22,5 +22,6 @@ def register(request):
 
 @api_view(['GET'])
 def get_users(request):
-    users = User.objects.all()
-    return Response(users)
+    #  ==== Added many = True as list of users is returning
+    serializer = UserSerializer(User.objects.all(), many=True)
+    return Response(serializer.data)
