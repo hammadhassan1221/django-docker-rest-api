@@ -46,6 +46,9 @@ def login(request):
     return response
 
 
+#  done this Get authenticated user API work with class and url is : api/user and command is get
+
+
 class AuthenticatedUser(APIView):
     #  JWT Authentication class made in authentication.py and declared below
     authentication_classes = [JWTAuthentication]
@@ -58,6 +61,16 @@ class AuthenticatedUser(APIView):
             'data': serializer.data
         })
 
+
+@api_view(['POST'])
+def logout(_):  # use fo under score as we are not using request or any other variable
+    response = Response()
+    response.delete_cookie(key='jwt')
+    response.data = {
+        'message': 'success'
+    }
+
+    return response
 
 @api_view(['GET'])
 def get_users(request):
