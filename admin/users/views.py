@@ -1,6 +1,8 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import exceptions
+
+from .authentication import generate_access_token
 from .models import User
 from .serializers import UserSerializer
 
@@ -31,7 +33,16 @@ def login(request):
         raise exceptions.AuthenticationFailed('User not found')
     if not user.check_password(password):
         raise exceptions.AuthenticationFailed('Incorrect password')
-    return Response('success')
+
+    response = Response()
+    token = generate_access_token(user)
+    response.set_cookie(key='jwt', value=token, httponly=True)
+    response.data = {
+        'jwt': token
+    }
+
+    return response
+
 
 
 @api_view(['GET'])
