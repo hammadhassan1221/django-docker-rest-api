@@ -12,7 +12,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     # This create will override the default create method
 
-
     def create(self, validated_data):
         password = validated_data.pop('password', None)
         instance = self.Meta.model(**validated_data)
