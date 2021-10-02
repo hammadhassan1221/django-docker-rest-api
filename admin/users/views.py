@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import exceptions, viewsets
+from rest_framework import exceptions, viewsets, status
 from rest_framework.views import APIView
 
 from .authentication import generate_access_token, JWTAuthentication
@@ -98,12 +98,15 @@ class RoleViewSet(viewsets.ViewSet):
         serializer = RoleSerializer(Role.objects.all(), many=True)
         return Response({
             'data': serializer.data
-
         })
 
-
-    def create(self,request):
-        pass
+    def create(self, request):
+        serializer = RoleSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({
+            'data': serializer.data
+        }, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, pk=None):
         pass
