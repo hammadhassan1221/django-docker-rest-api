@@ -6,10 +6,8 @@ from rest_framework.views import APIView
 
 from .authentication import generate_access_token, JWTAuthentication
 from .models import User, Permission, Role
+from admin.pagination import CustomPagination
 from .serializers import UserSerializer, PermissionSerializer, RoleSerializer
-
-
-# Create your views here.
 
 
 @api_view(['POST'])
@@ -138,16 +136,14 @@ class UserGenericAPIView(generics.GenericAPIView, mixins.ListModelMixin, mixins.
     permission_classes = [IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    pagination_class = CustomPagination
 
     def get(self, request, pk=None):
         if pk:
             return Response({
                 'data': self.retrieve(request, pk)
             })
-
-        return Response({
-            self.list(request)
-        })
+        return self.list(request)
 
     def post(self, request):
         return Response({
