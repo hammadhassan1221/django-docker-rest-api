@@ -16,6 +16,7 @@ class PermissionRelatedField(serializers.StringRelatedField):
         return data
 
 
+
 #  for roles API
 class RoleSerializer(serializers.ModelSerializer):
     permissions = PermissionRelatedField(many=True)
@@ -34,10 +35,23 @@ class RoleSerializer(serializers.ModelSerializer):
 
 
 
+class RoleRelatedField(serializers.RelatedField):
+
+    def to_representation(self, instance):
+         return RoleSerializer(instance).data
+
+    def to_internal_value(self, data):
+        return self.queryset.get(pk=data)
+
+
 class UserSerializer(serializers.ModelSerializer):
+
+    # Below work is to develop a relationship between role and user
+    role = RoleRelatedField(many=False, queryset=Role.objects.all())
+
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'password']
+        fields = ['id', 'first_name', 'last_name', 'email', 'password', 'role']
         extra_kwargs = {
             'password': {'write_only': True}
         }

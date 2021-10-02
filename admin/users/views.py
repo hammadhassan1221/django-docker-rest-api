@@ -131,7 +131,12 @@ class RoleViewSet(viewsets.ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class UserGenericAPIView(generics.GenericAPIView, mixins.ListModelMixin, mixins.RetrieveModelMixin):
+class UserGenericAPIView(generics.GenericAPIView,
+                         mixins.ListModelMixin,
+                         mixins.RetrieveModelMixin,
+                         mixins.CreateModelMixin,
+                         mixins.UpdateModelMixin):
+
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = User.objects.all()
@@ -146,13 +151,23 @@ class UserGenericAPIView(generics.GenericAPIView, mixins.ListModelMixin, mixins.
         return self.list(request)
 
     def post(self, request):
+
+        request.data.update({
+            'password': 1234,
+            'role': request.data['role_id']
+        })
         return Response({
             'data': self.create(request).data
         })
 
     def put(self, request, pk=None):
+        if request.data['role_id']:
+            request.data.update({
+                'role': request.data['role_id']
+            })
+
         return Response({
-            'data': self.update(request, pk).data
+            'data': self.partial_update(request, pk).data
         })
 
     def delete(self, request, pk=None):
