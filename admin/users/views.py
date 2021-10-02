@@ -5,8 +5,8 @@ from rest_framework import exceptions
 from rest_framework.views import APIView
 
 from .authentication import generate_access_token, JWTAuthentication
-from .models import User
-from .serializers import UserSerializer
+from .models import User, Permission
+from .serializers import UserSerializer, PermissionSerializer
 
 
 # Create your views here.
@@ -74,6 +74,17 @@ def logout(_):  # use fo under score as we are not using request or any other va
 
 @api_view(['GET'])
 def get_users(request):
-    #  ==== Added many = True as list of users is returning
+    #   Added many = True as list of users is returning
     serializer = UserSerializer(User.objects.all(), many=True)
     return Response(serializer.data)
+
+
+class PermissionAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = PermissionSerializer(Permission.objects.all(), many=True)
+        return Response({
+            'data': serializer.data
+        })
