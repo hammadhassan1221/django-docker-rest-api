@@ -7,7 +7,9 @@ from .views import (
     logout,
     PermissionAPIView,
     RoleViewSet,
-    UserGenericAPIView
+    UserGenericAPIView,
+    ProfileInfoAPIView,
+    ProfilePasswordAPIView
 )
 
 urlpatterns = [
@@ -30,8 +32,13 @@ urlpatterns = [
         }
     )),
 
+    # Profile related APIs
+    path('users/info', ProfileInfoAPIView.as_view()),
+    path('users/password', ProfilePasswordAPIView.as_view()),
+
     # Generic views implementation for users related APIs
     path('generic_view/users', UserGenericAPIView.as_view()),
     path('generic_view/users/<str:pk>', UserGenericAPIView.as_view())
+
 
 ]
