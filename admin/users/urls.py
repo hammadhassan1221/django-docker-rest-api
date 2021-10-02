@@ -1,5 +1,14 @@
 from django.urls import path
-from .views import get_users, register, login, AuthenticatedUser, logout, PermissionAPIView, RoleViewSet
+from .views import (
+    get_users,
+    register,
+    login,
+    AuthenticatedUser,
+    logout,
+    PermissionAPIView,
+    RoleViewSet,
+    UserGenericAPIView
+)
 
 urlpatterns = [
     path('users', get_users),
@@ -19,5 +28,10 @@ urlpatterns = [
         'put': 'update',
         'delete': 'destroy'
         }
-    ))
+    )),
+
+    # Generic views implementation for users related APIs
+    path('generic_view/users', UserGenericAPIView.as_view()),
+    path('generic_view/users/<str:pk>', UserGenericAPIView.as_view())
+
 ]
