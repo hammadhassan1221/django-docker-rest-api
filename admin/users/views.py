@@ -1,12 +1,12 @@
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import exceptions
+from rest_framework import exceptions, viewsets
 from rest_framework.views import APIView
 
 from .authentication import generate_access_token, JWTAuthentication
-from .models import User, Permission
-from .serializers import UserSerializer, PermissionSerializer
+from .models import User, Permission, Role
+from .serializers import UserSerializer, PermissionSerializer, RoleSerializer
 
 
 # Create your views here.
@@ -88,3 +88,28 @@ class PermissionAPIView(APIView):
         return Response({
             'data': serializer.data
         })
+
+
+class RoleViewSet(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        serializer = RoleSerializer(Role.objects.all(), many=True)
+        return Response({
+            'data': serializer.data
+
+        })
+
+
+    def create(self,request):
+        pass
+
+    def retrieve(self, request, pk=None):
+        pass
+
+    def update(self, request, pk=None):
+        pass
+
+    def destroy(self,request, pk=None):
+        pass
