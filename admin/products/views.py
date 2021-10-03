@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 
 from .models import Product
 from .serializers import ProductSerializer
-from users.authentication import  JWTAuthentication
+from users.authentication import JWTAuthentication
 
 
 class ProductsGenericAPIView(generics.GenericAPIView,
