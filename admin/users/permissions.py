@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from admin.users.serializers import UserSerializer
+from .serializers import UserSerializer
 
 
 class ViewPermissions(permissions.BasePermission):
